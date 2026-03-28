@@ -2,11 +2,40 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { Home, History, BarChart2, User, LogOut, Database } from 'lucide-react';
+import { Home, History, BarChart2, User, LogOut, Database, ArrowUp } from 'lucide-react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import ThemeToggle from '@/components/ThemeToggle';
+import { AnimatePresence, motion } from 'framer-motion';
+
+function ScrollToTop() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisible = () => setVisible(window.scrollY > 300);
+    window.addEventListener('scroll', toggleVisible);
+    return () => window.removeEventListener('scroll', toggleVisible);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          whileHover={{ scale: 1.1 }}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-8 right-8 w-11 h-11 rounded-full bg-[#7C3AED] text-white flex items-center justify-center shadow-[0_4px_15px_rgba(124,58,237,0.4)] z-[100] transition-colors hover:bg-[#6D28D9]"
+        >
+          <ArrowUp className="w-5 h-5" />
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
+}
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -45,13 +74,32 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Link 
                 key={item.href}
                 href={item.href} 
-                className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors relative group/nav ${
                   isActive 
-                    ? 'bg-primary/10 text-primary font-medium border border-primary/20' 
+                    ? 'text-primary font-medium' 
                     : 'hover:bg-primary/5'
                 }`}
                 style={!isActive ? { color: 'var(--text-secondary)' } : undefined}
               >
+                {isActive && (
+                  <>
+                    <div className="absolute inset-0 rounded-lg p-[1px] -z-10 animate-gradient-border opacity-100">
+                      <div className="w-full h-full rounded-lg bg-surface" style={{ backgroundColor: 'var(--bg-surface)' }}></div>
+                    </div>
+                    <style jsx>{`
+                      @keyframes rotate-gradient {
+                        0% { background-position: 0% 50%; }
+                        50% { background-position: 100% 50%; }
+                        100% { background-position: 0% 50%; }
+                      }
+                      .animate-gradient-border {
+                        background: linear-gradient(90deg, #7C3AED, #06b6d4, #7C3AED);
+                        background-size: 200% 200%;
+                        animation: rotate-gradient 3s linear infinite;
+                      }
+                    `}</style>
+                  </>
+                )}
                 <item.icon className="w-5 h-5" />
                 <span className="flex-1">{item.label}</span>
                 {(item as any).badge && (
@@ -100,6 +148,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="flex-1 overflow-y-auto p-4 md:p-8 relative z-10 w-full mx-auto max-w-[1600px]">
           {children}
         </div>
+
+        <ScrollToTop />
 
         {/* Subtle background glow */}
         <div className="fixed top-[-20%] right-[-10%] w-[50%] h-[50%] bg-primary/10 blur-[150px] rounded-full pointer-events-none z-0"></div>

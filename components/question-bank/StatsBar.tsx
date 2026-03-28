@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Hash, CheckCircle, Bookmark, Target } from 'lucide-react';
 import type { UserQuestionStats } from '@/lib/question-bank';
@@ -8,12 +9,42 @@ interface StatsBarProps {
   stats: UserQuestionStats;
 }
 
+function CountingNumber({ value, duration = 1500, suffix = "" }: { value: number, duration?: number, suffix?: string }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let startTimestamp: number | null = null;
+    const startValue = 0;
+    
+    const step = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      
+      // easeOutQuad curve: t * (2 - t)
+      const easedProgress = progress * (2 - progress);
+      const currentValue = Math.floor(easedProgress * (value - startValue) + startValue);
+      
+      setCount(currentValue);
+      
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      } else {
+        setCount(value);
+      }
+    };
+    
+    window.requestAnimationFrame(step);
+  }, [value, duration]);
+
+  return <>{count}{suffix}</>;
+}
+
 export default function StatsBar({ stats }: StatsBarProps) {
   const items = [
     { label: 'Total Questions', value: stats.totalQuestions, icon: Hash, color: 'text-blue-400', bg: 'bg-blue-500/20' },
     { label: 'Attempted', value: stats.attempted, icon: CheckCircle, color: 'text-green-400', bg: 'bg-green-500/20' },
     { label: 'Bookmarked', value: stats.bookmarked, icon: Bookmark, color: 'text-primary', bg: 'bg-primary/20' },
-    { label: 'Accuracy', value: `${stats.accuracy}%`, icon: Target, color: 'text-amber-400', bg: 'bg-amber-500/20' },
+    { label: 'Accuracy', value: stats.accuracy, suffix: '%', icon: Target, color: 'text-amber-400', bg: 'bg-amber-500/20' },
   ];
 
   return (
@@ -39,7 +70,7 @@ export default function StatsBar({ stats }: StatsBarProps) {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 + i * 0.08 }}
             >
-              {item.value}
+              <CountingNumber value={Number(item.value)} suffix={item.suffix} />
             </motion.p>
           </div>
         </motion.div>

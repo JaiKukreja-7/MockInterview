@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Trophy, Share2, RefreshCw, Play, ChevronDown, ChevronUp, CheckCircle, XCircle, Sparkles, Lightbulb, BookOpen, Loader2, TrendingUp, TrendingDown, SkipForward } from 'lucide-react';
 import Link from 'next/link';
+import confetti from 'canvas-confetti';
 
 export default function ResultsScreen() {
   const { id } = useParams() as { id: string };
@@ -17,6 +18,7 @@ export default function ResultsScreen() {
   const [summary, setSummary] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [expandedQ, setExpandedQ] = useState<number | null>(null);
+  const [showExcellentBanner, setShowExcellentBanner] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -44,6 +46,26 @@ export default function ResultsScreen() {
     }
     load();
   }, [id, supabase]);
+
+  useEffect(() => {
+    if (!loading && interview && (summary?.total_score || 0) > 80) {
+      const timer = setTimeout(() => {
+        const fire = () => {
+          confetti({
+            particleCount: 150,
+            spread: 80,
+            origin: { y: 0.6 },
+            colors: ['#7C3AED', '#06b6d4', '#10B981', '#ffffff']
+          });
+        };
+        fire();
+        setTimeout(fire, 300);
+        setShowExcellentBanner(true);
+        setTimeout(() => setShowExcellentBanner(false), 3000);
+      }, 1500); // Wait for ring animation (1.5s)
+      return () => clearTimeout(timer);
+    }
+  }, [loading, interview, summary]);
 
   if (loading) {
     return (
@@ -111,6 +133,20 @@ export default function ResultsScreen() {
               {skippedCount} question{skippedCount !== 1 ? 's' : ''} skipped
             </p>
           )}
+
+          <AnimatePresence>
+            {showExcellentBanner && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="mt-4 text-[#10B981] font-bold text-lg flex items-center space-x-2"
+              >
+                <Sparkles className="w-5 h-5" />
+                <span>🎉 Excellent performance!</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </Card>
 
         {/* AI Summary */}

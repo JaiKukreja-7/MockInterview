@@ -5,8 +5,47 @@ import { createClient } from '@/utils/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { motion } from 'framer-motion';
-import { Trophy, Clock, Target, Play, BarChart2, Zap } from 'lucide-react';
+import { Trophy, Clock, Target, Play, BarChart2, Zap, ArrowUp } from 'lucide-react';
 import Link from 'next/link';
+
+function WelcomeGreeting({ name }: { name?: string }) {
+  const [text, setText] = useState('');
+  const fullText = `Welcome back, ${name || 'User'} 👋`;
+  const [complete, setComplete] = useState(false);
+
+  useEffect(() => {
+    let i = 0;
+    const interval = setInterval(() => {
+      setText(fullText.slice(0, i + 1));
+      i++;
+      if (i >= fullText.length) {
+        clearInterval(interval);
+        setComplete(true);
+      }
+    }, 50);
+    return () => clearInterval(interval);
+  }, [fullText]);
+
+  return (
+    <div className="relative inline-block">
+      <h1 className="text-3xl font-bold inline">
+        {text}
+      </h1>
+      {!complete && (
+        <span className="inline-block ml-1 text-primary animate-pulse font-light">|</span>
+      )}
+      <style jsx>{`
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+        .animate-pulse {
+          animation: blink 0.8s infinite;
+        }
+      `}</style>
+    </div>
+  );
+}
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
@@ -108,7 +147,7 @@ export default function DashboardPage() {
       {/* Greeting */}
       <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Welcome back, {user?.name || 'User'} 👋</h1>
+          <WelcomeGreeting name={user?.name} />
           <p style={{ color: 'var(--text-secondary)' }} className="mt-1 flex items-center">
             <Zap className="w-4 h-4 text-amber-500 mr-1 fill-amber-500" />
             <span className="text-amber-500 font-medium mr-2">{user?.streak_count || 0} day streak!</span> Keep it up.
