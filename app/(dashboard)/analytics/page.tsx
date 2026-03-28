@@ -5,14 +5,27 @@ import { createClient } from '@/utils/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Bar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
+import { useTheme } from '@/components/ThemeProvider';
 
 export default function AnalyticsPage() {
   const supabase = createClient();
+  const { theme } = useTheme();
   const [loading, setLoading] = useState(true);
   const [trendData, setTrendData] = useState<any[]>([]);
   const [typeAvgData, setTypeAvgData] = useState<any[]>([]);
   const [skillsData, setSkillsData] = useState<any[]>([]);
   const [heatmapData, setHeatmapData] = useState<any[]>([]);
+
+  // Theme-aware chart colours
+  const isDark = theme === 'dark';
+  const axisColor = isDark ? 'rgba(255,255,255,0.4)' : '#0A0A0F';
+  const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.1)';
+  const tooltipBg = isDark ? '#13131A' : '#FFFFFF';
+  const tooltipBorder = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+  const tooltipText = isDark ? '#fff' : '#0A0A0F';
+  const radarTickColor = isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)';
+  const activeDotFill = isDark ? '#0A0A0F' : '#F8F7FF';
+  const cursorFill = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
 
   useEffect(() => {
     async function fetchAnalytics() {
@@ -135,13 +148,13 @@ export default function AnalyticsPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-6 lg:space-y-8 py-4 sm:py-8">
       <div>
-        <h1 className="text-3xl font-bold">Performance Analytics</h1>
-        <p className="text-white/60 mt-1">Deep dive into your interview metrics and skill progression.</p>
+        <h1 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Performance Analytics</h1>
+        <p className="mt-1" style={{ color: 'var(--text-secondary)' }}>Deep dive into your interview metrics and skill progression.</p>
       </div>
 
       {!hasData ? (
         <Card className="p-12 text-center">
-          <p className="text-white/50 text-lg">Complete your first interview to see analytics here!</p>
+          <p style={{ color: 'var(--text-muted)' }} className="text-lg">Complete your first interview to see analytics here!</p>
         </Card>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -154,14 +167,14 @@ export default function AnalyticsPage() {
             <CardContent className="h-[300px] w-full pt-4">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={trendData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                  <XAxis dataKey="date" stroke="rgba(255,255,255,0.4)" fontSize={12} tickLine={false} axisLine={false} />
-                  <YAxis stroke="rgba(255,255,255,0.4)" fontSize={12} tickLine={false} axisLine={false} domain={[0, 100]} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={gridColor} vertical={false} />
+                  <XAxis dataKey="date" stroke={axisColor} fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke={axisColor} fontSize={12} tickLine={false} axisLine={false} domain={[0, 100]} />
                   <RechartsTooltip 
-                    contentStyle={{ backgroundColor: '#13131A', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff' }} 
+                    contentStyle={{ backgroundColor: tooltipBg, borderColor: tooltipBorder, borderRadius: '8px', color: tooltipText }} 
                     itemStyle={{ color: '#7C3AED', fontWeight: 'bold' }}
                   />
-                  <Line type="monotone" dataKey="score" stroke="#7C3AED" strokeWidth={3} dot={{ r: 4, fill: '#7C3AED', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 6, fill: '#0A0A0F', stroke: '#7C3AED', strokeWidth: 3 }} />
+                  <Line type="monotone" dataKey="score" stroke="#7C3AED" strokeWidth={3} dot={{ r: 4, fill: '#7C3AED', strokeWidth: 2, stroke: tooltipText }} activeDot={{ r: 6, fill: activeDotFill, stroke: '#7C3AED', strokeWidth: 3 }} />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
@@ -175,11 +188,11 @@ export default function AnalyticsPage() {
             <CardContent className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart cx="50%" cy="50%" outerRadius="70%" data={skillsData}>
-                  <PolarGrid stroke="rgba(255,255,255,0.1)" />
-                  <PolarAngleAxis dataKey="subject" tick={{ fill: 'rgba(255,255,255,0.6)', fontSize: 11 }} />
+                  <PolarGrid stroke={gridColor} />
+                  <PolarAngleAxis dataKey="subject" tick={{ fill: radarTickColor, fontSize: 11 }} />
                   <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
                   <Radar name="Score" dataKey="A" stroke="#7C3AED" fill="#7C3AED" fillOpacity={0.4} />
-                  <RechartsTooltip contentStyle={{ backgroundColor: '#13131A', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }} />
+                  <RechartsTooltip contentStyle={{ backgroundColor: tooltipBg, borderColor: tooltipBorder, borderRadius: '8px', color: tooltipText }} />
                 </RadarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -193,12 +206,12 @@ export default function AnalyticsPage() {
             <CardContent className="h-[300px] w-full pt-4">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={typeAvgData} margin={{ top: 20, right: 0, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                  <XAxis dataKey="name" stroke="rgba(255,255,255,0.4)" fontSize={11} tickLine={false} axisLine={false} />
-                  <YAxis stroke="rgba(255,255,255,0.4)" fontSize={12} tickLine={false} axisLine={false} domain={[0, 100]} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={gridColor} vertical={false} />
+                  <XAxis dataKey="name" stroke={axisColor} fontSize={11} tickLine={false} axisLine={false} />
+                  <YAxis stroke={axisColor} fontSize={12} tickLine={false} axisLine={false} domain={[0, 100]} />
                   <RechartsTooltip 
-                    cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                    contentStyle={{ backgroundColor: '#13131A', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }} 
+                    cursor={{ fill: cursorFill }}
+                    contentStyle={{ backgroundColor: tooltipBg, borderColor: tooltipBorder, borderRadius: '8px', color: tooltipText }} 
                   />
                   <Bar dataKey="avg" fill="#06b6d4" radius={[4, 4, 0, 0]} barSize={40} />
                 </BarChart>
@@ -221,7 +234,7 @@ export default function AnalyticsPage() {
                   />
                 ))}
               </div>
-              <div className="mt-4 flex items-center justify-end space-x-2 text-xs text-white/40">
+              <div className="mt-4 flex items-center justify-end space-x-2 text-xs" style={{ color: 'var(--text-muted)' }}>
                 <span>Less</span>
                 <div className="w-3 h-3 rounded-sm bg-white/5"></div>
                 <div className="w-3 h-3 rounded-sm bg-primary/30"></div>

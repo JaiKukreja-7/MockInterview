@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Trophy, Share2, RefreshCw, Play, ChevronDown, ChevronUp, CheckCircle, XCircle, Sparkles, Lightbulb, BookOpen, Loader2, TrendingUp, TrendingDown } from 'lucide-react';
+import { Trophy, Share2, RefreshCw, Play, ChevronDown, ChevronUp, CheckCircle, XCircle, Sparkles, Lightbulb, BookOpen, Loader2, TrendingUp, TrendingDown, SkipForward } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ResultsScreen() {
@@ -53,7 +53,14 @@ export default function ResultsScreen() {
     );
   }
 
-  const totalScore = summary?.total_score || interview?.total_score || 0;
+  const answeredQuestions = questions.filter(q => q.user_answer !== null);
+  const skippedCount = questions.length - answeredQuestions.length;
+  // Compute final score only from answered questions to exclude skipped ones
+  const computedTotalScore = answeredQuestions.length > 0 
+    ? Math.round(answeredQuestions.reduce((acc, q) => acc + (q.score || 0), 0) / answeredQuestions.length * 10)
+    : 0;
+
+  const totalScore = summary?.total_score || computedTotalScore;
   const overallFeedback = summary?.overall_feedback || 'Summary not available yet.';
 
   const getScoreColor = (score: number) => {
@@ -99,6 +106,11 @@ export default function ResultsScreen() {
             <Trophy className="w-5 h-5 mr-2 text-amber-500" />
             {totalScore >= 80 ? 'Excellent!' : totalScore >= 60 ? 'Great Job!' : totalScore >= 40 ? 'Good Effort!' : 'Keep Practicing!'}
           </h3>
+          {skippedCount > 0 && (
+            <p className="mt-3 text-sm text-white/50 bg-white/5 py-1 px-3 rounded-full border border-white/10">
+              {skippedCount} question{skippedCount !== 1 ? 's' : ''} skipped
+            </p>
+          )}
         </Card>
 
         {/* AI Summary */}
@@ -187,10 +199,21 @@ export default function ResultsScreen() {
                   <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${score >= 7 ? 'bg-green-500/20 text-green-400' : score >= 4 ? 'bg-amber-500/20 text-amber-500' : 'bg-red-500/20 text-red-400'}`}>
                     {score >= 7 ? <CheckCircle className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
                   </div>
-                  <h3 className="font-medium text-base sm:text-lg text-white/90 truncate">Q{i + 1}: {q.question_text}</h3>
+                  <h3 className="font-medium text-base sm:text-lg text-white/90 truncate flex items-center gap-2">
+                    <span>Q{i + 1}: {q.question_text}</span>
+                    {q.user_answer === null && (
+                      <span className="text-[10px] uppercase font-bold tracking-wider bg-white/10 text-white/60 px-2 py-0.5 rounded-full border border-white/10">
+                        Skipped
+                      </span>
+                    )}
+                  </h3>
                 </div>
                 <div className="flex items-center space-x-3 sm:space-x-4 shrink-0">
-                  <span className={`font-bold px-2 py-0.5 rounded-lg border ${getScoreColor(score)}`}>{score}/10</span>
+                  {q.user_answer !== null ? (
+                    <span className={`font-bold px-2 py-0.5 rounded-lg border ${getScoreColor(score)}`}>{score}/10</span>
+                  ) : (
+                    <span className="font-bold px-2 py-0.5 rounded-lg border bg-white/5 text-white/40 border-white/10 shrink-0">0/10</span>
+                  )}
                   <div className="p-1 bg-white/5 rounded-full">
                     {expandedQ === i ? <ChevronUp className="w-5 h-5 text-white/60" /> : <ChevronDown className="w-5 h-5 text-white/60" />}
                   </div>
@@ -209,7 +232,14 @@ export default function ResultsScreen() {
                       {/* Your Answer */}
                       <div>
                         <span className="text-xs text-white/40 font-bold uppercase tracking-wider">Your Answer</span>
-                        <p className="mt-1.5 text-white/80 leading-relaxed bg-white/5 p-4 rounded-lg border border-white/5">{q.user_answer || 'No answer provided'}</p>
+                        {q.user_answer === null ? (
+                          <div className="mt-1.5 bg-white/5 p-4 rounded-lg border border-white/5 flex items-center space-x-2 text-white/40">
+                            <SkipForward className="w-4 h-4" />
+                            <span className="text-sm font-medium">Question was skipped</span>
+                          </div>
+                        ) : (
+                          <p className="mt-1.5 text-white/80 leading-relaxed bg-white/5 p-4 rounded-lg border border-white/5">{q.user_answer || 'No answer provided'}</p>
+                        )}
                       </div>
 
                       {/* Strengths */}

@@ -7,11 +7,13 @@ import { createClient } from '@/utils/supabase/client';
 import { updateStreak } from '@/lib/streak';
 import Editor from '@monaco-editor/react';
 import { Mic, MicOff, Send, Clock, ChevronRight, Loader2, Sparkles, CheckCircle, XCircle, Lightbulb, BookOpen, SkipForward, AlertTriangle } from 'lucide-react';
+import { useTheme } from '@/components/ThemeProvider';
 
 export default function InterviewScreen() {
   const { id } = useParams() as { id: string };
   const router = useRouter();
   const supabase = createClient();
+  const { theme } = useTheme();
 
   const [interview, setInterview] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -26,6 +28,7 @@ export default function InterviewScreen() {
   const [feedback, setFeedback] = useState<any>(null);
   const [generatingQ, setGeneratingQ] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+  const [showSkipConfirm, setShowSkipConfirm] = useState(false);
   
   const [questions, setQuestions] = useState<any[]>([]);
   const [previousQuestionTexts, setPreviousQuestionTexts] = useState<string[]>([]);
@@ -143,6 +146,32 @@ export default function InterviewScreen() {
     }
   };
 
+  // ---- Handle Skip Question ----
+  const handleSkip = async () => {
+    setSubmitted(true);
+    setEvaluating(true);
+    const currentQ = questions[currentQuestionIndex];
+    
+    try {
+      if (currentQ.dbId) {
+        await supabase.from('questions').update({
+          user_answer: null,
+          ai_feedback: null,
+          score: 0,
+          time_spent: timeSpent
+        }).eq('id', currentQ.dbId);
+      }
+      
+      showToast('Question skipped');
+      setShowSkipConfirm(false);
+      setEvaluating(false);
+      handleNext();
+    } catch (err) {
+      console.error('Skip error:', err);
+      setEvaluating(false);
+    }
+  };
+
   // ---- AI: Evaluate Answer ----
   const handleSubmit = async () => {
     if (isRecording) toggleRecording();
@@ -206,13 +235,15 @@ export default function InterviewScreen() {
           .eq('interview_id', id)
           .order('order_index');
 
-        const questionsPayload = (allQs || []).map(q => ({
-          question_text: q.question_text,
-          user_answer: q.user_answer || '',
-          score: q.score || 0,
-          strengths: q.ai_feedback?.strengths || [],
-          weaknesses: q.ai_feedback?.weaknesses || []
-        }));
+        const questionsPayload = (allQs || [])
+          .filter(q => q.user_answer !== null && q.user_answer !== undefined)
+          .map(q => ({
+            question_text: q.question_text,
+            user_answer: q.user_answer || '',
+            score: q.score || 0,
+            strengths: q.ai_feedback?.strengths || [],
+            weaknesses: q.ai_feedback?.weaknesses || []
+          }));
 
         const res = await fetch('/api/openai-gateway', {
           method: 'POST',
@@ -260,10 +291,7 @@ export default function InterviewScreen() {
     }
   };
 
-  // ---- Skip question (error recovery) ----
-  const handleSkip = () => {
-    handleNext();
-  };
+
 
   if (loading) {
     return (
@@ -507,7 +535,7 @@ export default function InterviewScreen() {
                   <Editor
                     height="100%"
                     defaultLanguage="javascript"
-                    theme="vs-dark"
+                    theme={theme === 'dark' ? 'vs-dark' : 'light'}
                     value={answerText}
                     onChange={(val) => setAnswerText(val || "")}
                     options={{
@@ -539,15 +567,32 @@ export default function InterviewScreen() {
               />
             )}
             
-            {submitted && <div className="absolute inset-0 bg-surface/30 backdrop-blur-[2px] z-10"></div>}
+          {submitted && <div className="absolute inset-0 bg-surface/30 backdrop-blur-[2px] z-10"></div>}
           </div>
 
           {!submitted && (
-            <div className="p-4 bg-surface/90 border-t border-white/10 backdrop-blur-md">
+            <div className="p-4 bg-surface/90 border-t border-white/10 backdrop-blur-md flex items-center justify-between gap-4">
+              <div className="relative">
+                <button 
+                  onClick={() => setShowSkipConfirm(true)}
+                  className="px-5 py-3.5 rounded-xl border-[0.5px] border-white/15 bg-transparent text-white/70 hover:bg-white/5 transition-all font-medium whitespace-nowrap"
+                >
+                  Skip Question &rarr;
+                </button>
+                {showSkipConfirm && (
+                  <div className="absolute bottom-[calc(100%+12px)] left-0 w-64 p-4 rounded-xl bg-surface border border-white/10 shadow-xl z-50">
+                    <p className="text-sm text-white/90 mb-3 font-medium">Skip this question? It will be marked as unanswered and scored 0.</p>
+                    <div className="flex space-x-2">
+                      <button onClick={handleSkip} className="flex-1 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-bold transition-colors">Yes, skip</button>
+                      <button onClick={() => setShowSkipConfirm(false)} className="flex-1 py-2 rounded-lg bg-transparent border border-white/10 hover:bg-white/5 text-xs font-bold transition-colors">Cancel</button>
+                    </div>
+                  </div>
+                )}
+              </div>
               <button 
                 onClick={handleSubmit}
                 disabled={(!answerText.trim() && !isRecording) || generatingQ}
-                className="w-full flex items-center justify-center space-x-2 bg-white text-black hover:bg-white/90 py-3.5 rounded-xl font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+                className="flex-1 flex items-center justify-center space-x-2 bg-primary text-white hover:bg-primary/90 py-3.5 rounded-xl font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-lg shadow-primary/20"
               >
                 <span>Submit Answer</span>
                 <Send className="w-4 h-4" />

@@ -109,7 +109,7 @@ export default function DashboardPage() {
       <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">Welcome back, {user?.name || 'User'} 👋</h1>
-          <p className="text-white/60 mt-1 flex items-center">
+          <p style={{ color: 'var(--text-secondary)' }} className="mt-1 flex items-center">
             <Zap className="w-4 h-4 text-amber-500 mr-1 fill-amber-500" />
             <span className="text-amber-500 font-medium mr-2">{user?.streak_count || 0} day streak!</span> Keep it up.
           </p>
@@ -128,7 +128,7 @@ export default function DashboardPage() {
           <CardContent className="p-4 flex items-center space-x-4">
             <div className="p-3 bg-blue-500/20 rounded-lg text-blue-400"><Target className="w-6 h-6" /></div>
             <div>
-              <p className="text-sm text-white/60 font-medium">Total Interviews</p>
+              <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Total Interviews</p>
               <h3 className="text-2xl font-bold">{stats.total}</h3>
             </div>
           </CardContent>
@@ -137,7 +137,7 @@ export default function DashboardPage() {
           <CardContent className="p-4 flex items-center space-x-4">
             <div className="p-3 bg-purple-500/20 rounded-lg text-purple-400"><BarChart2 className="w-6 h-6" /></div>
             <div>
-              <p className="text-sm text-white/60 font-medium">Average Score</p>
+              <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Average Score</p>
               <h3 className="text-2xl font-bold">{stats.avgScore}%</h3>
             </div>
           </CardContent>
@@ -146,7 +146,7 @@ export default function DashboardPage() {
           <CardContent className="p-4 flex items-center space-x-4">
             <div className="p-3 bg-amber-500/20 rounded-lg text-amber-400"><Trophy className="w-6 h-6" /></div>
             <div>
-              <p className="text-sm text-white/60 font-medium">Best Score</p>
+              <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Best Score</p>
               <h3 className="text-2xl font-bold">{stats.bestScore}%</h3>
             </div>
           </CardContent>
@@ -155,7 +155,7 @@ export default function DashboardPage() {
           <CardContent className="p-4 flex items-center space-x-4">
             <div className="p-3 bg-emerald-500/20 rounded-lg text-emerald-400"><Clock className="w-6 h-6" /></div>
             <div>
-              <p className="text-sm text-white/60 font-medium">Hours Practiced</p>
+              <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Hours Practiced</p>
               <h3 className="text-2xl font-bold">{stats.hours}h</h3>
             </div>
           </CardContent>
