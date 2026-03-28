@@ -92,7 +92,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         </header>
 
-        <div className="absolute top-6 right-6 md:top-8 md:right-8 z-50 hidden md:block">
+        {/* Desktop Top Bar */}
+        <div className="hidden md:flex items-center justify-end px-8 py-3 shrink-0" style={{ borderBottom: '1px solid var(--border-color)', transition: 'var(--transition)' }}>
           <ThemeToggle />
         </div>
 

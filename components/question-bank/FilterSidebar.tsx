@@ -82,7 +82,7 @@ export default function FilterSidebar({ filters, onFiltersChange, filteredCount,
       {/* Company Filter */}
       <FilterSection title="Company" expanded={expandedSections.company} onToggle={() => toggleSection('company')}>
         <div className="space-y-3">
-          <p className="text-[11px] text-white/40 uppercase tracking-wider font-semibold">Indian Companies</p>
+          <p className="text-[11px] uppercase tracking-wider font-semibold" style={{ color: 'var(--text-muted)' }}>Indian Companies</p>
           <div className="space-y-1">
             {INDIAN_COMPANIES.map(c => (
               <label key={c.id} className="flex items-center space-x-2.5 py-1.5 px-2 rounded-lg hover:bg-white/5 cursor-pointer transition-colors">
@@ -92,13 +92,23 @@ export default function FilterSidebar({ filters, onFiltersChange, filteredCount,
                   onChange={() => toggleArrayFilter('companies', c.name)}
                   className="w-3.5 h-3.5 rounded border-white/20 bg-white/5 text-primary focus:ring-primary/50 accent-[#7C3AED]"
                 />
-                <img src={c.logo} alt={c.name} className="w-5 h-5 rounded object-contain bg-white/10 p-0.5"
-                  onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${c.name}&size=20&background=7C3AED&color=fff`; }} />
-                <span className="text-sm text-white/70">{c.name}</span>
+                <img 
+                  src={c.logo} 
+                  alt={c.name} 
+                  width={32}
+                  height={32}
+                  loading="lazy"
+                  className="rounded object-contain"
+                  style={{ borderRadius: '4px', objectFit: 'contain', background: 'white', padding: '2px' }}
+                  onError={(e) => { 
+                    e.currentTarget.src = `https://ui-avatars.com/api/?name=${c.name}&background=7C3AED&color=fff&size=64&bold=true&length=2`
+                  }} 
+                />
+                <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{c.name}</span>
               </label>
             ))}
           </div>
-          <p className="text-[11px] text-white/40 uppercase tracking-wider font-semibold mt-3">Global Companies</p>
+          <p className="text-[11px] uppercase tracking-wider font-semibold mt-3" style={{ color: 'var(--text-muted)' }}>Global Companies</p>
           <div className="space-y-1">
             {GLOBAL_COMPANIES.map(c => (
               <label key={c.id} className="flex items-center space-x-2.5 py-1.5 px-2 rounded-lg hover:bg-white/5 cursor-pointer transition-colors">
@@ -108,9 +118,19 @@ export default function FilterSidebar({ filters, onFiltersChange, filteredCount,
                   onChange={() => toggleArrayFilter('companies', c.name)}
                   className="w-3.5 h-3.5 rounded border-white/20 bg-white/5 text-primary focus:ring-primary/50 accent-[#7C3AED]"
                 />
-                <img src={c.logo} alt={c.name} className="w-5 h-5 rounded object-contain bg-white/10 p-0.5"
-                  onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${c.name}&size=20&background=7C3AED&color=fff`; }} />
-                <span className="text-sm text-white/70">{c.name}</span>
+                <img 
+                  src={c.logo} 
+                  alt={c.name} 
+                  width={32}
+                  height={32}
+                  loading="lazy"
+                  className="rounded object-contain"
+                  style={{ borderRadius: '4px', objectFit: 'contain', background: 'white', padding: '2px' }}
+                  onError={(e) => { 
+                    e.currentTarget.src = `https://ui-avatars.com/api/?name=${c.name}&background=7C3AED&color=fff&size=64&bold=true&length=2`
+                  }} 
+                />
+                <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{c.name}</span>
               </label>
             ))}
           </div>
@@ -130,8 +150,9 @@ export default function FilterSidebar({ filters, onFiltersChange, filteredCount,
                 key={d}
                 onClick={() => toggleArrayFilter('difficulties', d)}
                 className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                  active ? color + ' ring-1 ring-offset-1 ring-offset-background' : 'bg-white/5 text-white/50 border-white/10 hover:bg-white/10'
+                  active ? color + ' ring-1 ring-offset-1 ring-offset-background' : ''
                 }`}
+                style={!active ? { background: 'var(--bg-card)', color: 'var(--text-muted)', borderColor: 'var(--border-color)' } : undefined}
               >
                 {d}
               </button>
@@ -150,8 +171,9 @@ export default function FilterSidebar({ filters, onFiltersChange, filteredCount,
               className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
                 filters.categories?.includes(c)
                   ? 'bg-primary/20 text-primary border-primary/30'
-                  : 'bg-white/5 text-white/50 border-white/10 hover:bg-white/10'
+                  : ''
               }`}
+              style={!filters.categories?.includes(c) ? { background: 'var(--bg-card)', color: 'var(--text-muted)', borderColor: 'var(--border-color)' } : undefined}
             >
               {c}
             </button>
@@ -169,8 +191,9 @@ export default function FilterSidebar({ filters, onFiltersChange, filteredCount,
               className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-all ${
                 filters.topics?.includes(t)
                   ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30'
-                  : 'bg-white/5 text-white/50 border-white/10 hover:bg-white/10'
+                  : ''
               }`}
+              style={!filters.topics?.includes(t) ? { background: 'var(--bg-card)', color: 'var(--text-muted)', borderColor: 'var(--border-color)' } : undefined}
             >
               {t}
             </button>
@@ -188,8 +211,9 @@ export default function FilterSidebar({ filters, onFiltersChange, filteredCount,
               className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
                 filters.frequencies?.includes(f)
                   ? 'bg-orange-500/20 text-orange-400 border-orange-500/30'
-                  : 'bg-white/5 text-white/50 border-white/10 hover:bg-white/10'
+                  : ''
               }`}
+              style={!filters.frequencies?.includes(f) ? { background: 'var(--bg-card)', color: 'var(--text-muted)', borderColor: 'var(--border-color)' } : undefined}
             >
               {f === 'Very Common' ? '🔥 ' : ''}{f}
             </button>
@@ -207,8 +231,9 @@ export default function FilterSidebar({ filters, onFiltersChange, filteredCount,
               className={`px-3 py-1.5 rounded-full text-xs font-medium border capitalize transition-all ${
                 (filters.status || 'all') === s
                   ? 'bg-primary/20 text-primary border-primary/30'
-                  : 'bg-white/5 text-white/50 border-white/10 hover:bg-white/10'
+                  : ''
               }`}
+              style={(filters.status || 'all') !== s ? { background: 'var(--bg-card)', color: 'var(--text-muted)', borderColor: 'var(--border-color)' } : undefined}
             >
               {s}
             </button>

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Bookmark, ChevronUp, CheckCircle, Clock, Flame, ArrowRight } from 'lucide-react';
 import type { CompanyQuestion } from '@/lib/question-bank';
+import { useTheme } from '@/components/ThemeProvider';
 
 interface QuestionCardProps {
   question: CompanyQuestion;
@@ -20,11 +21,16 @@ export default function QuestionCard({
   question, isBookmarked, isUpvoted, isAttempted, attemptScore,
   onBookmark, onUpvote, onPractice, index = 0
 }: QuestionCardProps) {
-  const difficultyColor = question.difficulty === 'Easy'
-    ? 'bg-green-500/10 text-green-400 border-green-500/20'
-    : question.difficulty === 'Medium'
-    ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
-    : 'bg-red-500/10 text-red-400 border-red-500/20';
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
+  const difficultyColor = isDark
+    ? (question.difficulty === 'Easy'
+      ? 'bg-green-500/10 text-green-400 border-green-500/20'
+      : question.difficulty === 'Medium'
+      ? 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+      : 'bg-red-500/10 text-red-400 border-red-500/20')
+    : '';
 
   const freqIcon = question.frequency === 'Very Common' ? '🔥' : question.frequency === 'Common' ? '📊' : '💎';
 
@@ -49,14 +55,26 @@ export default function QuestionCard({
       <div className="flex items-center flex-wrap gap-2 mb-3">
         <div className="flex items-center space-x-2">
           <img
-            src={question.company_logo_url}
+            src={`https://www.google.com/s2/favicons?domain=${question.company.toLowerCase().replace(/\s+/g, '')}.com&sz=64`}
             alt={question.company}
-            className="w-6 h-6 rounded-md object-contain bg-white/10 p-0.5"
-            onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${question.company}&size=24&background=7C3AED&color=fff`; }}
+            width={24}
+            height={24}
+            loading="lazy"
+            className="rounded-md object-contain"
+            style={{ borderRadius: '4px', objectFit: 'contain', background: 'white', padding: '2px' }}
+            onError={(e) => { 
+              e.currentTarget.src = `https://ui-avatars.com/api/?name=${question.company}&background=7C3AED&color=fff&size=64&bold=true&length=2`
+            }}
           />
           <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{question.company}</span>
         </div>
-        <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold border ${difficultyColor}`}>
+        <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold border ${difficultyColor}`}
+          style={!isDark ? {
+            background: question.difficulty === 'Easy' ? '#dcfce7' : question.difficulty === 'Medium' ? '#fef9c3' : '#fee2e2',
+            color: question.difficulty === 'Easy' ? '#166534' : question.difficulty === 'Medium' ? '#854d0e' : '#991b1b',
+            borderColor: question.difficulty === 'Easy' ? '#bbf7d0' : question.difficulty === 'Medium' ? '#fde68a' : '#fecaca',
+          } : undefined}
+        >
           {question.difficulty}
         </span>
         <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-primary/10 text-primary border border-primary/20">

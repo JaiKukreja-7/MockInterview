@@ -73,8 +73,8 @@ export default function ResultsScreen() {
     <div className="max-w-4xl mx-auto space-y-8 py-8">
       
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold">Interview Results</h1>
-        <p className="text-white/60">Role: {interview?.role} • Type: {interview?.type}</p>
+        <h1 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Interview Results</h1>
+        <p style={{ color: 'var(--text-secondary)' }}>Role: {interview?.role} • Type: {interview?.type}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -99,7 +99,7 @@ export default function ResultsScreen() {
                   {totalScore}
                 </motion.span>
               </span>
-              <span className="text-xl text-white/40">/100</span>
+              <span className="text-xl" style={{ color: 'var(--text-muted)' }}>/100</span>
             </div>
           </div>
           <h3 className="mt-6 text-xl font-semibold flex items-center text-primary/90">
@@ -119,7 +119,7 @@ export default function ResultsScreen() {
             <CardTitle>AI Analysis Summary</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="p-5 rounded-xl bg-white/5 border border-white/5 text-white/80 leading-relaxed font-medium">
+            <div className="p-5 rounded-xl leading-relaxed font-medium" style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)', color: 'var(--text-secondary)' }}>
               {overallFeedback}
             </div>
 
@@ -163,11 +163,11 @@ export default function ResultsScreen() {
             )}
             
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <button className="flex-1 flex items-center justify-center space-x-2 bg-white/10 hover:bg-white/20 text-white py-3 rounded-xl font-medium transition-colors">
+              <button className="flex-1 flex items-center justify-center space-x-2 py-3 rounded-xl font-medium transition-colors" style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)', color: 'var(--text-primary)' }}>
                 <Share2 className="w-5 h-5" />
                 <span>Share Results</span>
               </button>
-              <button onClick={() => router.push(`/interview/${id}`)} className="flex-1 flex items-center justify-center space-x-2 bg-white/10 hover:bg-white/20 text-white py-3 rounded-xl font-medium transition-colors">
+              <button onClick={() => router.push(`/interview/${id}`)} className="flex-1 flex items-center justify-center space-x-2 py-3 rounded-xl font-medium transition-colors" style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)', color: 'var(--text-primary)' }}>
                 <RefreshCw className="w-5 h-5" />
                 <span>Retake</span>
               </button>
@@ -183,7 +183,7 @@ export default function ResultsScreen() {
       </div>
 
       {/* Question Breakdown */}
-      <h2 className="text-2xl font-bold mt-12 mb-6">Detailed Breakdown</h2>
+      <h2 className="text-2xl font-bold mt-12 mb-6" style={{ color: 'var(--text-primary)' }}>Detailed Breakdown</h2>
       
       <div className="space-y-4">
         {questions.map((q, i) => {
@@ -199,7 +199,7 @@ export default function ResultsScreen() {
                   <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${score >= 7 ? 'bg-green-500/20 text-green-400' : score >= 4 ? 'bg-amber-500/20 text-amber-500' : 'bg-red-500/20 text-red-400'}`}>
                     {score >= 7 ? <CheckCircle className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
                   </div>
-                  <h3 className="font-medium text-base sm:text-lg text-white/90 truncate flex items-center gap-2">
+                  <h3 className="font-medium text-base sm:text-lg truncate flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
                     <span>Q{i + 1}: {q.question_text}</span>
                     {q.user_answer === null && (
                       <span className="text-[10px] uppercase font-bold tracking-wider bg-white/10 text-white/60 px-2 py-0.5 rounded-full border border-white/10">
@@ -226,7 +226,8 @@ export default function ResultsScreen() {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    className="bg-[#050508] border-t border-white/10"
+                    className="bg-[#050508]"
+                    style={{ borderTop: '1px solid var(--border-color)', background: 'var(--bg-surface)' }}
                   >
                     <div className="p-6 space-y-4">
                       {/* Your Answer */}

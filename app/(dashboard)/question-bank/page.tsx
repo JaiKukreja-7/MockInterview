@@ -165,11 +165,13 @@ export default function QuestionBankPage() {
       {/* Tabs: Questions / Progress */}
       <div className="flex space-x-1 rounded-xl p-1 w-fit" style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)' }}>
         <button onClick={() => setActiveView('questions')}
-          className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${activeView === 'questions' ? 'bg-primary text-white' : 'text-white/50 hover:text-white'}`}>
+          className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${activeView === 'questions' ? 'bg-primary text-white' : ''}`}
+          style={activeView !== 'questions' ? { color: 'var(--text-muted)' } : undefined}>
           All Questions
         </button>
         <button onClick={() => setActiveView('progress')}
-          className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${activeView === 'progress' ? 'bg-primary text-white' : 'text-white/50 hover:text-white'}`}>
+          className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${activeView === 'progress' ? 'bg-primary text-white' : ''}`}
+          style={activeView !== 'progress' ? { color: 'var(--text-muted)' } : undefined}>
           My Progress
         </button>
       </div>
@@ -202,7 +204,8 @@ export default function QuestionBankPage() {
                   <select
                     value={filters.sortBy || 'recent'}
                     onChange={e => setFilters({ ...filters, sortBy: e.target.value as any })}
-                    className="bg-surface border border-white/10 rounded-lg px-3 py-2 text-sm text-white/70 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="bg-surface border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
                   >
                     {sortOptions.map(o => <option key={o.value} value={o.value} className="bg-surface">{o.label}</option>)}
                   </select>
@@ -214,12 +217,12 @@ export default function QuestionBankPage() {
                 <QuestionSkeleton count={5} />
               ) : filteredQuestions.length === 0 ? (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                  className="text-center py-16 glass rounded-2xl border border-white/10 bg-white/5">
-                  <div className="w-16 h-16 rounded-full bg-white/5 mx-auto flex items-center justify-center mb-4">
-                    <Search className="w-8 h-8 text-white/20" />
+                  className="text-center py-16 glass rounded-2xl" style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)' }}>
+                  <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-4" style={{ background: 'var(--bg-surface)' }}>
+                    <Search className="w-8 h-8" style={{ color: 'var(--text-muted)' }} />
                   </div>
-                  <h3 className="text-lg font-medium text-white/70 mb-2">No questions match your filters</h3>
-                  <p className="text-white/40 text-sm mb-4">Try adjusting your filters or search query.</p>
+                  <h3 className="text-lg font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>No questions match your filters</h3>
+                  <p className="text-sm mb-4" style={{ color: 'var(--text-muted)' }}>Try adjusting your filters or search query.</p>
                   <button onClick={() => setFilters({ page: 1, pageSize: 20, sortBy: 'recent' })}
                     className="text-sm text-primary font-medium hover:text-primary/80 transition-colors">
                     Clear all filters

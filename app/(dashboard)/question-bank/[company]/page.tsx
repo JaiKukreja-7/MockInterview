@@ -96,8 +96,18 @@ export default function CompanyPage() {
       <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
         className="glass rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md">
         <div className="flex items-start space-x-4">
-          <img src={company.logo} alt={company.name} className="w-12 h-12 rounded-xl object-contain bg-white/10 p-2"
-            onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${company.name}&size=48&background=7C3AED&color=fff`; }} />
+          <img 
+            src={company.logo} 
+            alt={company.name} 
+            width={40}
+            height={40}
+            loading="lazy"
+            className="rounded-xl object-contain"
+            style={{ borderRadius: '4px', objectFit: 'contain', background: 'white', padding: '2px' }}
+            onError={(e) => { 
+              e.currentTarget.src = `https://ui-avatars.com/api/?name=${company.name}&background=7C3AED&color=fff&size=64&bold=true&length=2`
+            }} 
+          />
           <div className="flex-1">
             <h1 className="text-2xl font-bold text-white">{company.name}</h1>
             <p className="text-sm text-white/60 mt-2 leading-relaxed">{company.description}</p>

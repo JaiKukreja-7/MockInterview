@@ -172,36 +172,36 @@ export default function DashboardPage() {
             <CardContent className="p-6 pt-0">
               {interviews.length === 0 ? (
                  <div className="text-center py-10">
-                   <div className="w-16 h-16 rounded-full bg-white/5 mx-auto flex items-center justify-center mb-4">
-                     <Target className="w-8 h-8 text-white/20" />
-                   </div>
-                   <h3 className="text-lg font-medium text-white/80">No interviews yet</h3>
-                   <p className="text-white/40 mb-4 text-sm mt-1">Start your first mock interview to see stats here.</p>
-                 </div>
+                    <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-4" style={{ background: 'var(--bg-card)' }}>
+                      <Target className="w-8 h-8" style={{ color: 'var(--text-muted)' }} />
+                    </div>
+                    <h3 className="text-lg font-medium" style={{ color: 'var(--text-secondary)' }}>No interviews yet</h3>
+                    <p className="mb-4 text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Start your first mock interview to see stats here.</p>
+                  </div>
               ) : (
                 <div className="space-y-4 cursor-default mt-4">
                   {interviews.map(interview => (
-                    <div key={interview.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 transition-colors">
-                      <div className="mb-3 sm:mb-0">
-                        <h4 className="font-medium text-white">{interview.role}</h4>
-                        <div className="flex items-center space-x-3 mt-1 text-sm text-white/50">
-                          <span className="capitalize">{interview.type}</span>
-                          <span className="inline-block w-1 h-1 rounded-full bg-white/20"></span>
-                          <span>{new Date(interview.created_at).toLocaleDateString()}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between sm:justify-end space-x-4">
-                        <div className="text-right">
-                          <span className="text-2xl font-bold text-primary">{interview.total_score || 0}</span>
-                          <span className="text-white/40 text-sm">/100</span>
-                        </div>
-                        <Link href={`/results/${interview.id}`}>
-                          <button className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm font-medium transition-colors">
-                            Review
-                          </button>
-                        </Link>
-                      </div>
-                    </div>
+                    <div key={interview.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl transition-colors" style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)' }}>
+                       <div className="mb-3 sm:mb-0">
+                         <h4 className="font-medium" style={{ color: 'var(--text-primary)' }}>{interview.role}</h4>
+                         <div className="flex items-center space-x-3 mt-1 text-sm" style={{ color: 'var(--text-muted)' }}>
+                           <span className="capitalize">{interview.type}</span>
+                           <span className="inline-block w-1 h-1 rounded-full" style={{ background: 'var(--text-muted)' }}></span>
+                           <span>{new Date(interview.created_at).toLocaleDateString()}</span>
+                         </div>
+                       </div>
+                       <div className="flex items-center justify-between sm:justify-end space-x-4">
+                         <div className="text-right">
+                           <span className="text-2xl font-bold text-primary">{interview.total_score || 0}</span>
+                           <span className="text-sm" style={{ color: 'var(--text-muted)' }}>/100</span>
+                         </div>
+                         <Link href={`/results/${interview.id}`}>
+                           <button className="px-4 py-2 rounded-lg text-sm font-medium transition-colors" style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)', color: 'var(--text-primary)' }}>
+                             Review
+                           </button>
+                         </Link>
+                       </div>
+                     </div>
                   ))}
                 </div>
               )}
@@ -222,10 +222,10 @@ export default function DashboardPage() {
                   {weakAreas.map((area, i) => (
                     <div key={i}>
                       <div className="flex justify-between text-sm mb-2">
-                        <span className="text-white/80 font-medium">{area.topic}</span>
-                        <span className="text-white/50">{area.score}%</span>
-                      </div>
-                      <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+                         <span className="font-medium" style={{ color: 'var(--text-secondary)' }}>{area.topic}</span>
+                         <span style={{ color: 'var(--text-muted)' }}>{area.score}%</span>
+                       </div>
+                       <div className="h-2 w-full rounded-full overflow-hidden" style={{ background: 'var(--bg-card)' }}>
                         <motion.div 
                           initial={{ width: 0 }}
                           animate={{ width: `${area.score}%` }}
@@ -237,7 +237,7 @@ export default function DashboardPage() {
                   ))}
                 </div>
                 ) : (
-                  <p className="text-white/40 text-sm text-center py-4">Complete interviews to see your weak areas here.</p>
+                  <p className="text-sm text-center py-4" style={{ color: 'var(--text-muted)' }}>Complete interviews to see your weak areas here.</p>
                 )}
               </CardContent>
             </Card>
@@ -258,13 +258,13 @@ export default function DashboardPage() {
                     { name: 'David', score: 650 },
                     { name: 'Eve', score: 600 }
                   ].map((user, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/5">
+                     <div key={i} className="flex items-center justify-between p-3 rounded-lg" style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)' }}>
                       <div className="flex items-center space-x-3">
-                        <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
-                          i === 0 ? 'bg-amber-500/20 text-amber-500 border border-amber-500/20' :
-                          i === 1 ? 'bg-slate-300/20 text-slate-300 border border-slate-300/20' :
-                          i === 2 ? 'bg-amber-700/20 text-amber-600 border border-amber-700/20' :
-                          'bg-white/5 text-white/40'
+                         <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
+                           i === 0 ? 'bg-amber-500/20 text-amber-500 border border-amber-500/20' :
+                           i === 1 ? 'bg-slate-300/20 text-slate-300 border border-slate-300/20' :
+                           i === 2 ? 'bg-amber-700/20 text-amber-600 border border-amber-700/20' :
+                           ''
                         }`}>
                           {i + 1}
                         </span>

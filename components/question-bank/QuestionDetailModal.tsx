@@ -155,8 +155,18 @@ export default function QuestionDetailModal({ question, onClose }: QuestionDetai
           {/* Header */}
           <div className="p-5 border-b border-white/10 flex items-center justify-between shrink-0">
             <div className="flex items-center space-x-3">
-              <img src={question.company_logo_url} alt={question.company} className="w-8 h-8 rounded-lg object-contain bg-white/10 p-1"
-                onError={(e) => { (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${question.company}&size=32&background=7C3AED&color=fff`; }} />
+              <img 
+                src={`https://www.google.com/s2/favicons?domain=${question.company.toLowerCase().replace(/\s+/g, '')}.com&sz=64`} 
+                alt={question.company} 
+                width={32}
+                height={32}
+                loading="lazy"
+                className="rounded-lg object-contain"
+                style={{ borderRadius: '4px', objectFit: 'contain', background: 'white', padding: '2px' }}
+                onError={(e) => { 
+                  e.currentTarget.src = `https://ui-avatars.com/api/?name=${question.company}&background=7C3AED&color=fff&size=64&bold=true&length=2`
+                }} 
+              />
               <div>
                 <span className="text-sm font-semibold text-white">{question.company}</span>
                 <div className="flex items-center space-x-2 mt-0.5">

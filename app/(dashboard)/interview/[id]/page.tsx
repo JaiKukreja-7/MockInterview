@@ -333,13 +333,13 @@ export default function InterviewScreen() {
       </AnimatePresence>
 
       {/* Progress Bar */}
-      <div className="flex items-center justify-between bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm shrink-0">
+      <div className="flex items-center justify-between rounded-2xl p-4 backdrop-blur-sm shrink-0" style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)', transition: 'var(--transition)' }}>
         <div className="flex-1 max-w-sm">
           <div className="flex justify-between mb-2 text-sm">
-            <span className="text-white/60 font-medium">Question {currentQuestionIndex + 1} of {totalQ}</span>
+            <span className="font-medium" style={{ color: 'var(--text-secondary)' }}>Question {currentQuestionIndex + 1} of {totalQ}</span>
             <span className="text-primary font-medium">{Math.round(((currentQuestionIndex + 1) / totalQ) * 100)}%</span>
           </div>
-          <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+          <div className="h-2 w-full rounded-full overflow-hidden" style={{ background: 'var(--bg-surface)' }}>
             <motion.div 
               className="h-full bg-primary"
               initial={{ width: `${progressPercent}%` }}
@@ -369,12 +369,12 @@ export default function InterviewScreen() {
           >
             <div className="bg-surface/95 backdrop-blur-xl rounded-[22px] p-6 lg:p-10 min-h-[250px] shadow-2xl shadow-primary/10 flex items-center">
               {generatingQ ? (
-                <div className="flex items-center space-x-3 text-white/60">
+                <div className="flex items-center space-x-3" style={{ color: 'var(--text-secondary)' }}>
                   <Loader2 className="w-6 h-6 animate-spin text-primary" />
                   <span className="text-lg font-medium">Generating question...</span>
                 </div>
               ) : (
-                <h2 className="text-2xl lg:text-3xl font-bold leading-tight text-white/90">
+                <h2 className="text-2xl lg:text-3xl font-bold leading-tight" style={{ color: 'var(--text-primary)' }}>
                   {questions[currentQuestionIndex]?.text}
                 </h2>
               )}
@@ -388,7 +388,8 @@ export default function InterviewScreen() {
                 initial={{ opacity: 0, height: 0, y: 20 }}
                 animate={{ opacity: 1, height: 'auto', y: 0 }}
                 exit={{ opacity: 0, height: 0 }}
-                className="bg-white/5 border border-white/10 rounded-2xl p-6 relative overflow-hidden shrink-0 mt-6"
+                className="rounded-2xl p-6 relative overflow-hidden shrink-0 mt-6"
+                style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)', transition: 'var(--transition)' }}
               >
                 <div className="absolute top-0 left-0 w-full h-1 bg-primary/50"></div>
                 <div className="flex items-center space-x-2 mb-4">
@@ -399,13 +400,13 @@ export default function InterviewScreen() {
                 {evaluating ? (
                   <div className="flex flex-col items-center justify-center py-8 space-y-3">
                     <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                    <span className="text-white/60 font-medium">Analyzing your answer...</span>
+                    <span className="font-medium" style={{ color: 'var(--text-secondary)' }}>Analyzing your answer...</span>
                   </div>
                 ) : feedback ? (
                   <div className="space-y-4">
                     {/* Score Badge */}
-                    <div className="flex items-center justify-between mb-2 pb-4 border-b border-white/10">
-                      <span className="text-white/60">Score</span>
+                    <div className="flex items-center justify-between mb-2 pb-4" style={{ borderBottom: '1px solid var(--border-color)' }}>
+                      <span style={{ color: 'var(--text-secondary)' }}>Score</span>
                       <div className={`text-3xl font-bold px-4 py-1 rounded-xl border ${getScoreColor(feedback.score)}`}>
                         {feedback.score}<span className="text-lg opacity-60">/10</span>
                       </div>
@@ -479,7 +480,7 @@ export default function InterviewScreen() {
                 ) : (
                   /* Feedback failed — allow skip */
                   <div className="text-center py-6 space-y-3">
-                    <p className="text-white/50">Could not get AI feedback. You can skip to the next question.</p>
+                    <p style={{ color: 'var(--text-muted)' }}>Could not get AI feedback. You can skip to the next question.</p>
                   </div>
                 )}
 
@@ -510,9 +511,9 @@ export default function InterviewScreen() {
         </div>
 
         {/* Answer Panel */}
-        <div className="flex flex-col bg-white/5 border border-white/10 rounded-3xl overflow-hidden relative shadow-xl">
-          <div className="p-4 border-b border-white/10 flex items-center justify-between bg-surface/50">
-            <span className="text-sm font-medium text-white/60">Your Answer</span>
+        <div className="flex flex-col rounded-3xl overflow-hidden relative shadow-xl" style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)', transition: 'var(--transition)' }}>
+          <div className="p-4 flex items-center justify-between" style={{ borderBottom: '1px solid var(--border-color)', background: 'var(--bg-surface)' }}>
+            <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>Your Answer</span>
             
             <button
               onClick={toggleRecording}
@@ -552,7 +553,8 @@ export default function InterviewScreen() {
                     value={answerText}
                     onChange={(e) => setAnswerText(e.target.value)}
                     disabled={submitted}
-                    className="w-full h-full p-4 bg-transparent resize-none focus:outline-none text-white/90 font-mono text-sm disabled:opacity-50"
+                    className="w-full h-full p-4 bg-transparent resize-none focus:outline-none font-mono text-sm disabled:opacity-50"
+                    style={{ color: 'var(--text-primary)' }}
                     placeholder="Write your code here..."
                   />
                 </div>
@@ -562,7 +564,8 @@ export default function InterviewScreen() {
                 value={answerText}
                 onChange={(e) => setAnswerText(e.target.value)}
                 disabled={submitted}
-                className="w-full h-[300px] lg:h-full p-6 bg-transparent resize-none focus:outline-none text-white/90 text-lg disabled:opacity-50"
+                className="w-full h-[300px] lg:h-full p-6 bg-transparent resize-none focus:outline-none text-lg disabled:opacity-50"
+                style={{ color: 'var(--text-primary)' }}
                 placeholder="Type your answer here or use voice input..."
               />
             )}
@@ -571,7 +574,7 @@ export default function InterviewScreen() {
           </div>
 
           {!submitted && (
-            <div className="p-4 bg-surface/90 border-t border-white/10 backdrop-blur-md flex items-center justify-between gap-4">
+            <div className="p-4 backdrop-blur-md flex items-center justify-between gap-4" style={{ background: 'var(--bg-surface)', borderTop: '1px solid var(--border-color)' }}>
               <div className="relative">
                 <button 
                   onClick={() => setShowSkipConfirm(true)}

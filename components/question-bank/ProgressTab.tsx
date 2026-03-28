@@ -135,11 +135,11 @@ export default function ProgressTab() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       {/* Overall Progress */}
-      <div className="glass rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md">
+      <div className="glass rounded-2xl p-6 backdrop-blur-md" style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)', transition: 'var(--transition)' }}>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-bold text-white">Overall Progress</h3>
-            <p className="text-sm text-white/50">{attemptedCount} of {totalQuestions} questions attempted</p>
+            <h3 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>Overall Progress</h3>
+            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{attemptedCount} of {totalQuestions} questions attempted</p>
           </div>
           {streak > 0 && (
             <div className="flex items-center space-x-1.5 bg-amber-500/10 text-amber-400 px-3 py-1.5 rounded-full border border-amber-500/20">
@@ -148,7 +148,7 @@ export default function ProgressTab() {
             </div>
           )}
         </div>
-        <div className="h-4 bg-white/10 rounded-full overflow-hidden">
+        <div className="h-4 rounded-full overflow-hidden" style={{ background: 'var(--bg-surface)' }}>
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${overallPercent}%` }}
@@ -156,23 +156,23 @@ export default function ProgressTab() {
             className="h-full bg-gradient-to-r from-primary to-cyan-500 rounded-full"
           />
         </div>
-        <p className="text-right text-sm text-white/60 mt-1 font-medium">{overallPercent}%</p>
+        <p className="text-right text-sm mt-1 font-medium" style={{ color: 'var(--text-secondary)' }}>{overallPercent}%</p>
       </div>
 
       {/* Difficulty Accuracy */}
-      <div className="glass rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md">
+      <div className="glass rounded-2xl p-6 backdrop-blur-md" style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)', transition: 'var(--transition)' }}>
         <div className="flex items-center space-x-2 mb-4">
           <BarChart2 className="w-5 h-5 text-primary" />
-          <h3 className="text-lg font-bold text-white">Accuracy by Difficulty</h3>
+          <h3 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>Accuracy by Difficulty</h3>
         </div>
         <div className="space-y-4">
           {difficultyAccuracy.map(d => (
             <div key={d.difficulty}>
               <div className="flex justify-between text-sm mb-1.5">
-                <span className="text-white/70 font-medium">{d.difficulty}</span>
-                <span className="text-white/50">{d.accuracy}%</span>
+                <span className="font-medium" style={{ color: 'var(--text-secondary)' }}>{d.difficulty}</span>
+                <span style={{ color: 'var(--text-muted)' }}>{d.accuracy}%</span>
               </div>
-              <div className="h-2.5 bg-white/10 rounded-full overflow-hidden">
+              <div className="h-2.5 rounded-full overflow-hidden" style={{ background: 'var(--bg-surface)' }}>
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${d.accuracy}%` }}
@@ -186,16 +186,16 @@ export default function ProgressTab() {
       </div>
 
       {/* Company Breakdown */}
-      <div className="glass rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md">
-        <h3 className="text-lg font-bold text-white mb-4">By Company</h3>
+      <div className="glass rounded-2xl p-6 backdrop-blur-md" style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)', transition: 'var(--transition)' }}>
+        <h3 className="text-lg font-bold mb-4" style={{ color: 'var(--text-primary)' }}>By Company</h3>
         <div className="space-y-3">
           {companyBreakdown.map(c => (
             <div key={c.name}>
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-white/70">{c.name}</span>
-                <span className="text-white/50">{c.attempted}/{c.total}</span>
+                <span style={{ color: 'var(--text-secondary)' }}>{c.name}</span>
+                <span style={{ color: 'var(--text-muted)' }}>{c.attempted}/{c.total}</span>
               </div>
-              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+              <div className="h-2 rounded-full overflow-hidden" style={{ background: 'var(--bg-surface)' }}>
                 <div className="h-full bg-primary/80 rounded-full transition-all" style={{ width: `${c.total > 0 ? (c.attempted / c.total) * 100 : 0}%` }} />
               </div>
             </div>
@@ -205,16 +205,16 @@ export default function ProgressTab() {
 
       {/* Weakest Topics */}
       {weakestTopics.length > 0 && (
-        <div className="glass rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md">
+        <div className="glass rounded-2xl p-6 backdrop-blur-md" style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)', transition: 'var(--transition)' }}>
           <div className="flex items-center space-x-2 mb-4">
             <TrendingDown className="w-5 h-5 text-red-400" />
-            <h3 className="text-lg font-bold text-white">Weakest Topics</h3>
+            <h3 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>Weakest Topics</h3>
           </div>
           <div className="space-y-3">
             {weakestTopics.map((t, i) => (
               <div key={t.topic} className="flex items-center space-x-3 p-3 rounded-xl bg-red-500/5 border border-red-500/10">
                 <span className="w-6 h-6 rounded-full bg-red-500/20 text-red-400 text-xs font-bold flex items-center justify-center">{i + 1}</span>
-                <span className="text-sm text-white/70 flex-1">{t.topic}</span>
+                <span className="text-sm flex-1" style={{ color: 'var(--text-secondary)' }}>{t.topic}</span>
                 <span className="text-sm font-bold text-red-400">{t.avgScore}%</span>
               </div>
             ))}
@@ -223,16 +223,16 @@ export default function ProgressTab() {
       )}
 
       {/* Topic Breakdown */}
-      <div className="glass rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md">
-        <h3 className="text-lg font-bold text-white mb-4">By Topic</h3>
+      <div className="glass rounded-2xl p-6 backdrop-blur-md" style={{ background: 'var(--bg-card)', border: '0.5px solid var(--border-color)', transition: 'var(--transition)' }}>
+        <h3 className="text-lg font-bold mb-4" style={{ color: 'var(--text-primary)' }}>By Topic</h3>
         <div className="space-y-2.5">
           {topicBreakdown.map(t => (
             <div key={t.name}>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-white/60">{t.name}</span>
-                <span className="text-white/40">{t.attempted}/{t.total}</span>
+                <span style={{ color: 'var(--text-secondary)' }}>{t.name}</span>
+                <span style={{ color: 'var(--text-muted)' }}>{t.attempted}/{t.total}</span>
               </div>
-              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+              <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--bg-surface)' }}>
                 <div className="h-full bg-cyan-500/70 rounded-full" style={{ width: `${t.total > 0 ? (t.attempted / t.total) * 100 : 0}%` }} />
               </div>
             </div>

@@ -121,8 +121,9 @@ export default function SetupPage() {
                       className={`p-6 rounded-xl border-2 cursor-pointer transition-all flex items-center justify-center text-center ${
                         selections.type === type 
                           ? 'border-primary bg-primary/10 shadow-[0_0_20px_rgba(124,58,237,0.15)] scale-[1.02]' 
-                          : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10'
+                          : ''
                       }`}
+                      style={selections.type !== type ? { background: 'var(--bg-card)', borderColor: 'var(--border-color)' } : undefined}
                     >
                       <h3 className="font-semibold text-lg">{type}</h3>
                     </div>
@@ -142,8 +143,9 @@ export default function SetupPage() {
                       className={`p-4 rounded-xl border-2 cursor-pointer text-center transition-all flex items-center justify-center ${
                         selections.role === role 
                           ? 'border-primary bg-primary/10 shadow-[0_0_15px_rgba(124,58,237,0.1)] scale-[1.02]' 
-                          : 'border-white/10 bg-white/5 hover:border-white/20'
+                          : ''
                       }`}
+                      style={selections.role !== role ? { background: 'var(--bg-card)', borderColor: 'var(--border-color)' } : undefined}
                     >
                       <h3 className="font-medium">{role}</h3>
                     </div>
@@ -165,8 +167,9 @@ export default function SetupPage() {
                           ? diff === 'Easy' ? 'border-green-500 bg-green-500/10 shadow-[0_0_15px_rgba(34,197,94,0.15)] scale-[1.02]' :
                             diff === 'Medium' ? 'border-amber-500 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.15)] scale-[1.02]' :
                             'border-red-500 bg-red-500/10 shadow-[0_0_15px_rgba(239,68,68,0.15)] scale-[1.02]'
-                          : 'border-white/10 bg-white/5 hover:border-white/20'
+                          : ''
                       }`}
+                      style={selections.difficulty !== diff ? { background: 'var(--bg-card)', borderColor: 'var(--border-color)' } : undefined}
                     >
                       <h3 className="font-semibold text-lg">{diff}</h3>
                     </div>
@@ -186,8 +189,9 @@ export default function SetupPage() {
                       className={`w-24 h-24 rounded-full flex flex-col items-center justify-center border-2 cursor-pointer transition-all ${
                         selections.questions === num 
                           ? 'border-primary bg-primary/20 scale-110 shadow-[0_0_20px_rgba(124,58,237,0.3)]' 
-                          : 'border-white/10 bg-white/5 hover:border-white/20'
+                          : ''
                       }`}
+                      style={selections.questions !== num ? { background: 'var(--bg-card)', borderColor: 'var(--border-color)' } : undefined}
                     >
                       <span className="text-3xl font-bold">{num}</span>
                       <span className="text-xs text-white/60">Q&apos;s</span>

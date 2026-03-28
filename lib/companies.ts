@@ -14,7 +14,7 @@ export const COMPANIES: CompanyInfo[] = [
   {
     id: 'flipkart',
     name: 'Flipkart',
-    logo: 'https://logo.clearbit.com/flipkart.com',
+    logo: 'https://www.google.com/s2/favicons?domain=flipkart.com&sz=64',
     domain: 'flipkart.com',
     region: 'Indian',
     description: 'Flipkart is India\'s leading e-commerce marketplace. Their interviews typically include 3-4 rounds covering DSA, System Design, and HR. Expect medium-to-hard DSA problems focusing on arrays, trees, and dynamic programming. System design rounds often involve designing e-commerce features at scale.',
@@ -29,7 +29,7 @@ export const COMPANIES: CompanyInfo[] = [
   {
     id: 'paytm',
     name: 'Paytm',
-    logo: 'https://logo.clearbit.com/paytm.com',
+    logo: 'https://www.google.com/s2/favicons?domain=paytm.com&sz=64',
     domain: 'paytm.com',
     region: 'Indian',
     description: 'Paytm is India\'s largest digital payments platform. Interviews focus heavily on backend engineering and DSA. Expect questions about payment systems, concurrency, and distributed systems. Typically 2-3 coding rounds followed by a system design and hiring manager round.',
@@ -44,7 +44,7 @@ export const COMPANIES: CompanyInfo[] = [
   {
     id: 'zomato',
     name: 'Zomato',
-    logo: 'https://logo.clearbit.com/zomato.com',
+    logo: 'https://www.google.com/s2/favicons?domain=zomato.com&sz=64',
     domain: 'zomato.com',
     region: 'Indian',
     description: 'Zomato is India\'s largest food delivery and restaurant discovery platform. Interviews include DSA coding rounds and system design. They emphasize real-world problem solving — expect questions involving geo-location algorithms, recommendation systems, and delivery optimization.',
@@ -59,7 +59,7 @@ export const COMPANIES: CompanyInfo[] = [
   {
     id: 'swiggy',
     name: 'Swiggy',
-    logo: 'https://logo.clearbit.com/swiggy.com',
+    logo: 'https://www.google.com/s2/favicons?domain=swiggy.in&sz=64',
     domain: 'swiggy.com',
     region: 'Indian',
     description: 'Swiggy is a leading on-demand delivery platform in India. Their engineering interviews focus on backend systems and DSA. Expect problems related to logistics, real-time tracking, and high-availability systems. Typically 2 DSA rounds, 1 system design, and 1 hiring manager round.',
@@ -74,7 +74,7 @@ export const COMPANIES: CompanyInfo[] = [
   {
     id: 'cred',
     name: 'CRED',
-    logo: 'https://logo.clearbit.com/cred.club',
+    logo: 'https://www.google.com/s2/favicons?domain=cred.club&sz=64',
     domain: 'cred.club',
     region: 'Indian',
     description: 'CRED is a fintech platform for credit card bill payments and rewards. Known for their high engineering bar, interviews focus on DSA and frontend development. Expect clean UI/UX discussions, React/JS deep dives, and medium-hard DSA problems.',
@@ -89,7 +89,7 @@ export const COMPANIES: CompanyInfo[] = [
   {
     id: 'razorpay',
     name: 'Razorpay',
-    logo: 'https://logo.clearbit.com/razorpay.com',
+    logo: 'https://www.google.com/s2/favicons?domain=razorpay.com&sz=64',
     domain: 'razorpay.com',
     region: 'Indian',
     description: 'Razorpay is India\'s leading payment gateway and financial services company. Interviews are rigorous with focus on DSA and system design. Expect questions about payment processing, distributed systems, and database design. Typically 3-4 technical rounds.',
@@ -104,7 +104,7 @@ export const COMPANIES: CompanyInfo[] = [
   {
     id: 'infosys',
     name: 'Infosys',
-    logo: 'https://logo.clearbit.com/infosys.com',
+    logo: 'https://www.google.com/s2/favicons?domain=infosys.com&sz=64',
     domain: 'infosys.com',
     region: 'Indian',
     description: 'Infosys is one of India\'s largest IT services companies. Interviews for freshers include aptitude tests, coding rounds (usually easy-medium DSA), and HR interviews. The process emphasizes fundamentals — OOP, DBMS, OS, and basic data structures.',
@@ -119,7 +119,7 @@ export const COMPANIES: CompanyInfo[] = [
   {
     id: 'tcs',
     name: 'TCS',
-    logo: 'https://logo.clearbit.com/tcs.com',
+    logo: 'https://www.google.com/s2/favicons?domain=tcs.com&sz=64',
     domain: 'tcs.com',
     region: 'Indian',
     description: 'Tata Consultancy Services (TCS) is a global IT services leader. The interview process includes an aptitude test (TCS NQT), coding round, technical interview, and HR round. Questions focus on basics — data structures, algorithms, OOP, and HR behavioral questions.',
@@ -134,7 +134,7 @@ export const COMPANIES: CompanyInfo[] = [
   {
     id: 'wipro',
     name: 'Wipro',
-    logo: 'https://logo.clearbit.com/wipro.com',
+    logo: 'https://www.google.com/s2/favicons?domain=wipro.com&sz=64',
     domain: 'wipro.com',
     region: 'Indian',
     description: 'Wipro is a leading global information technology company. Their interview process includes aptitude assessment, technical interview (DSA + CS fundamentals), and HR round. Questions are typically easy to medium difficulty focusing on core programming concepts.',
@@ -150,7 +150,7 @@ export const COMPANIES: CompanyInfo[] = [
   {
     id: 'google',
     name: 'Google',
-    logo: 'https://logo.clearbit.com/google.com',
+    logo: 'https://www.google.com/s2/favicons?domain=google.com&sz=64',
     domain: 'google.com',
     region: 'Global',
     description: 'Google\'s interview process is famously rigorous, involving 4-5 rounds of coding and system design. Expect medium-to-hard algorithmic problems heavily focusing on graphs, dynamic programming, and optimization. System design rounds test ability to design at Google scale (billions of users).',
@@ -165,7 +165,7 @@ export const COMPANIES: CompanyInfo[] = [
   {
     id: 'amazon',
     name: 'Amazon',
-    logo: 'https://logo.clearbit.com/amazon.com',
+    logo: 'https://www.google.com/s2/favicons?domain=amazon.com&sz=64',
     domain: 'amazon.com',
     region: 'Global',
     description: 'Amazon interviews heavily emphasize their 16 Leadership Principles alongside technical ability. Expect 4-5 rounds mixing DSA coding, system design, and behavioral (LP) questions. Every interview includes at least one behavioral question using the STAR method.',
@@ -181,7 +181,7 @@ export const COMPANIES: CompanyInfo[] = [
   {
     id: 'microsoft',
     name: 'Microsoft',
-    logo: 'https://logo.clearbit.com/microsoft.com',
+    logo: 'https://www.google.com/s2/favicons?domain=microsoft.com&sz=64',
     domain: 'microsoft.com',
     region: 'Global',
     description: 'Microsoft interviews typically involve 4-5 rounds of coding and system design. They value clean code, strong fundamentals, and the ability to optimize solutions. Expect a mix of medium-difficulty DSA problems and system design questions focused on cloud services and enterprise software.',
@@ -196,7 +196,7 @@ export const COMPANIES: CompanyInfo[] = [
   {
     id: 'meta',
     name: 'Meta',
-    logo: 'https://logo.clearbit.com/meta.com',
+    logo: 'https://www.google.com/s2/favicons?domain=meta.com&sz=64',
     domain: 'meta.com',
     region: 'Global',
     description: 'Meta (formerly Facebook) interviews focus on coding speed and system design at scale. Expect 2 coding rounds (45 min each, solve 2 problems per round) and 1 system design round. Problems are typically medium difficulty but require fast, optimal solutions.',
@@ -211,7 +211,7 @@ export const COMPANIES: CompanyInfo[] = [
   {
     id: 'adobe',
     name: 'Adobe',
-    logo: 'https://logo.clearbit.com/adobe.com',
+    logo: 'https://www.google.com/s2/favicons?domain=adobe.com&sz=64',
     domain: 'adobe.com',
     region: 'Global',
     description: 'Adobe interviews include coding rounds, system design, and sometimes frontend-specific rounds for relevant roles. They value creative problem solving and strong CS fundamentals. Expect medium-difficulty DSA problems and questions about UI/UX implementation.',
