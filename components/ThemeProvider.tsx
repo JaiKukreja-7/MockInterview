@@ -22,27 +22,27 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
 
+  // Read saved preference on mount and apply it
   useEffect(() => {
-    setMounted(true);
-    const saved = localStorage.getItem("mockprep-theme") as Theme | null;
-    const initial = saved === "light" ? "light" : "dark";
-    setTheme(initial);
-    applyTheme(initial);
-  }, []);
-
-  const applyTheme = (t: Theme) => {
-    if (t === "light") {
-      document.documentElement.setAttribute("data-theme", "light");
-    } else {
-      document.documentElement.removeAttribute("data-theme");
+    try {
+      const saved = localStorage.getItem("mockprep-theme") || "dark";
+      const initial: Theme = saved === "light" ? "light" : "dark";
+      setTheme(initial);
+      document.documentElement.setAttribute("data-theme", initial);
+    } catch (e) {
+      // localStorage unavailable — stay with dark default
+      document.documentElement.setAttribute("data-theme", "dark");
     }
-  };
+    setMounted(true);
+  }, []);
 
   const toggleTheme = () => {
     const newTheme: Theme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
-    localStorage.setItem("mockprep-theme", newTheme);
-    applyTheme(newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+    try {
+      localStorage.setItem("mockprep-theme", newTheme);
+    } catch (e) {}
   };
 
   // Avoid hydration mismatch — render children immediately but provide context

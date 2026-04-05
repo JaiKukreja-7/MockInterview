@@ -84,78 +84,210 @@ export default function FilterSidebar({ filters, onFiltersChange, filteredCount,
         <div className="space-y-3">
           <p className="text-[11px] uppercase tracking-wider font-semibold" style={{ color: 'var(--text-muted)' }}>Indian Companies</p>
           <div className="space-y-1">
-            {INDIAN_COMPANIES.map(c => (
-              <label key={c.id} className="flex items-center space-x-2.5 py-1.5 px-2 rounded-lg hover:bg-white/5 cursor-pointer transition-colors">
-                <input
-                  type="checkbox"
-                  checked={filters.companies?.includes(c.name) || false}
-                  onChange={() => toggleArrayFilter('companies', c.name)}
-                  className="w-3.5 h-3.5 rounded border-white/20 bg-white/5 text-primary focus:ring-primary/50 accent-[#7C3AED]"
-                />
-                <img 
-                  src={c.logo} 
-                  alt={c.name} 
-                  width={32}
-                  height={32}
-                  loading="lazy"
-                  className="rounded object-contain"
-                  style={{ borderRadius: '4px', objectFit: 'contain', background: 'white', padding: '2px' }}
-                  onError={(e) => { 
-                    e.currentTarget.src = `https://ui-avatars.com/api/?name=${c.name}&background=7C3AED&color=fff&size=64&bold=true&length=2`
-                  }} 
-                />
-                <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{c.name}</span>
-              </label>
-            ))}
+            {INDIAN_COMPANIES.map(c => {
+              const checked = filters.companies?.includes(c.name) || false;
+              return (
+                <label 
+                  key={c.id} 
+                  className="group flex items-center gap-[10px] py-1.5 px-2 rounded-lg cursor-pointer transition-colors"
+                  onMouseEnter={(e) => {
+                    const box = e.currentTarget.querySelector('.custom-checkbox') as HTMLElement;
+                    const text = e.currentTarget.querySelector('.label-text') as HTMLElement;
+                    if (box) box.style.borderColor = 'rgba(124,58,237,0.5)';
+                    if (text) text.style.color = 'var(--text-primary)';
+                  }}
+                  onMouseLeave={(e) => {
+                    const box = e.currentTarget.querySelector('.custom-checkbox') as HTMLElement;
+                    const text = e.currentTarget.querySelector('.label-text') as HTMLElement;
+                    if (box) box.style.borderColor = 'rgba(255,255,255,0.2)';
+                    if (text) text.style.color = 'var(--text-secondary)';
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => toggleArrayFilter('companies', c.name)}
+                    className="sr-only"
+                  />
+                  <div 
+                    className="custom-checkbox"
+                    style={{
+                      width: '16px',
+                      height: '16px',
+                      borderRadius: '4px',
+                      border: '0.5px solid rgba(255,255,255,0.2)',
+                      background: checked ? '#7C3AED' : 'rgba(255,255,255,0.04)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'all 0.15s ease',
+                      flexShrink: 0
+                    }}
+                  >
+                    <AnimatePresence>
+                      {checked && (
+                        <motion.svg 
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          exit={{ scale: 0 }}
+                          transition={{ duration: 0.15 }}
+                          width="10" height="10" viewBox="0 0 10 10" fill="none"
+                        >
+                          <path d="M2 5l2.5 2.5L8 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </motion.svg>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                  <img 
+                    src={c.logo} 
+                    alt={c.name} 
+                    width={24}
+                    height={24}
+                    loading="lazy"
+                    className="rounded object-contain bg-white p-0.5"
+                    onError={(e) => { 
+                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${c.name}&background=7C3AED&color=fff&size=48&bold=true&length=2`
+                    }} 
+                  />
+                  <span className="label-text text-[13px] transition-colors" style={{ color: 'var(--text-secondary)' }}>{c.name}</span>
+                </label>
+              );
+            })}
           </div>
           <p className="text-[11px] uppercase tracking-wider font-semibold mt-3" style={{ color: 'var(--text-muted)' }}>Global Companies</p>
           <div className="space-y-1">
-            {GLOBAL_COMPANIES.map(c => (
-              <label key={c.id} className="flex items-center space-x-2.5 py-1.5 px-2 rounded-lg hover:bg-white/5 cursor-pointer transition-colors">
-                <input
-                  type="checkbox"
-                  checked={filters.companies?.includes(c.name) || false}
-                  onChange={() => toggleArrayFilter('companies', c.name)}
-                  className="w-3.5 h-3.5 rounded border-white/20 bg-white/5 text-primary focus:ring-primary/50 accent-[#7C3AED]"
-                />
-                <img 
-                  src={c.logo} 
-                  alt={c.name} 
-                  width={32}
-                  height={32}
-                  loading="lazy"
-                  className="rounded object-contain"
-                  style={{ borderRadius: '4px', objectFit: 'contain', background: 'white', padding: '2px' }}
-                  onError={(e) => { 
-                    e.currentTarget.src = `https://ui-avatars.com/api/?name=${c.name}&background=7C3AED&color=fff&size=64&bold=true&length=2`
-                  }} 
-                />
-                <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{c.name}</span>
-              </label>
-            ))}
+            {GLOBAL_COMPANIES.map(c => {
+              const checked = filters.companies?.includes(c.name) || false;
+              return (
+                <label 
+                  key={c.id} 
+                  className="group flex items-center gap-[10px] py-1.5 px-2 rounded-lg cursor-pointer transition-colors"
+                  onMouseEnter={(e) => {
+                    const box = e.currentTarget.querySelector('.custom-checkbox') as HTMLElement;
+                    const text = e.currentTarget.querySelector('.label-text') as HTMLElement;
+                    if (box) box.style.borderColor = 'rgba(124,58,237,0.5)';
+                    if (text) text.style.color = 'var(--text-primary)';
+                  }}
+                  onMouseLeave={(e) => {
+                    const box = e.currentTarget.querySelector('.custom-checkbox') as HTMLElement;
+                    const text = e.currentTarget.querySelector('.label-text') as HTMLElement;
+                    if (box) box.style.borderColor = 'rgba(255,255,255,0.2)';
+                    if (text) text.style.color = 'var(--text-secondary)';
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => toggleArrayFilter('companies', c.name)}
+                    className="sr-only"
+                  />
+                  <div 
+                    className="custom-checkbox"
+                    style={{
+                      width: '16px',
+                      height: '16px',
+                      borderRadius: '4px',
+                      border: '0.5px solid rgba(255,255,255,0.2)',
+                      background: checked ? '#7C3AED' : 'rgba(255,255,255,0.04)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'all 0.15s ease',
+                      flexShrink: 0
+                    }}
+                  >
+                    <AnimatePresence>
+                      {checked && (
+                        <motion.svg 
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          exit={{ scale: 0 }}
+                          transition={{ duration: 0.15 }}
+                          width="10" height="10" viewBox="0 0 10 10" fill="none"
+                        >
+                          <path d="M2 5l2.5 2.5L8 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </motion.svg>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                  <img 
+                    src={c.logo} 
+                    alt={c.name} 
+                    width={24}
+                    height={24}
+                    loading="lazy"
+                    className="rounded object-contain bg-white p-0.5"
+                    onError={(e) => { 
+                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${c.name}&background=7C3AED&color=fff&size=48&bold=true&length=2`
+                    }} 
+                  />
+                  <span className="label-text text-[13px] transition-colors" style={{ color: 'var(--text-secondary)' }}>{c.name}</span>
+                </label>
+              );
+            })}
           </div>
         </div>
       </FilterSection>
 
       {/* Difficulty */}
       <FilterSection title="Difficulty" expanded={expandedSections.difficulty} onToggle={() => toggleSection('difficulty')}>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex flex-col gap-1">
           {ALL_DIFFICULTIES.map(d => {
-            const active = filters.difficulties?.includes(d);
-            const color = d === 'Easy' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
-                          d === 'Medium' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
-                          'bg-red-500/10 text-red-400 border-red-500/20';
+            const checked = filters.difficulties?.includes(d) || false;
             return (
-              <button
-                key={d}
-                onClick={() => toggleArrayFilter('difficulties', d)}
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                  active ? color + ' ring-1 ring-offset-1 ring-offset-background' : ''
-                }`}
-                style={!active ? { background: 'var(--bg-card)', color: 'var(--text-muted)', borderColor: 'var(--border-color)' } : undefined}
+              <label 
+                key={d} 
+                className="group flex items-center gap-[10px] py-1.5 px-2 rounded-lg cursor-pointer transition-colors"
+                onMouseEnter={(e) => {
+                  const box = e.currentTarget.querySelector('.custom-checkbox') as HTMLElement;
+                  const text = e.currentTarget.querySelector('.label-text') as HTMLElement;
+                  if (box) box.style.borderColor = 'rgba(124,58,237,0.5)';
+                  if (text) text.style.color = 'var(--text-primary)';
+                }}
+                onMouseLeave={(e) => {
+                  const box = e.currentTarget.querySelector('.custom-checkbox') as HTMLElement;
+                  const text = e.currentTarget.querySelector('.label-text') as HTMLElement;
+                  if (box) box.style.borderColor = 'rgba(255,255,255,0.2)';
+                  if (text) text.style.color = 'var(--text-secondary)';
+                }}
               >
-                {d}
-              </button>
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={() => toggleArrayFilter('difficulties', d)}
+                  className="sr-only"
+                />
+                <div 
+                  className="custom-checkbox"
+                  style={{
+                    width: '16px',
+                    height: '16px',
+                    borderRadius: '4px',
+                    border: '0.5px solid rgba(255,255,255,0.2)',
+                    background: checked ? '#7C3AED' : 'rgba(255,255,255,0.04)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.15s ease',
+                    flexShrink: 0
+                  }}
+                >
+                  <AnimatePresence>
+                    {checked && (
+                      <motion.svg 
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        exit={{ scale: 0 }}
+                        transition={{ duration: 0.15 }}
+                        width="10" height="10" viewBox="0 0 10 10" fill="none"
+                      >
+                        <path d="M2 5l2.5 2.5L8 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </motion.svg>
+                    )}
+                  </AnimatePresence>
+                </div>
+                <span className="label-text text-[13px] transition-colors" style={{ color: 'var(--text-secondary)' }}>{d}</span>
+              </label>
             );
           })}
         </div>
@@ -163,21 +295,65 @@ export default function FilterSidebar({ filters, onFiltersChange, filteredCount,
 
       {/* Category */}
       <FilterSection title="Category" expanded={expandedSections.category} onToggle={() => toggleSection('category')}>
-        <div className="flex gap-2 flex-wrap">
-          {ALL_CATEGORIES.map(c => (
-            <button
-              key={c}
-              onClick={() => toggleArrayFilter('categories', c)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
-                filters.categories?.includes(c)
-                  ? 'bg-primary/20 text-primary border-primary/30'
-                  : ''
-              }`}
-              style={!filters.categories?.includes(c) ? { background: 'var(--bg-card)', color: 'var(--text-muted)', borderColor: 'var(--border-color)' } : undefined}
-            >
-              {c}
-            </button>
-          ))}
+        <div className="flex flex-col gap-1">
+          {ALL_CATEGORIES.map(c => {
+            const checked = filters.categories?.includes(c) || false;
+            return (
+              <label 
+                key={c} 
+                className="group flex items-center gap-[10px] py-1.5 px-2 rounded-lg cursor-pointer transition-colors"
+                onMouseEnter={(e) => {
+                  const box = e.currentTarget.querySelector('.custom-checkbox') as HTMLElement;
+                  const text = e.currentTarget.querySelector('.label-text') as HTMLElement;
+                  if (box) box.style.borderColor = 'rgba(124,58,237,0.5)';
+                  if (text) text.style.color = 'var(--text-primary)';
+                }}
+                onMouseLeave={(e) => {
+                  const box = e.currentTarget.querySelector('.custom-checkbox') as HTMLElement;
+                  const text = e.currentTarget.querySelector('.label-text') as HTMLElement;
+                  if (box) box.style.borderColor = 'rgba(255,255,255,0.2)';
+                  if (text) text.style.color = 'var(--text-secondary)';
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={() => toggleArrayFilter('categories', c)}
+                  className="sr-only"
+                />
+                <div 
+                  className="custom-checkbox"
+                  style={{
+                    width: '16px',
+                    height: '16px',
+                    borderRadius: '4px',
+                    border: '0.5px solid rgba(255,255,255,0.2)',
+                    background: checked ? '#7C3AED' : 'rgba(255,255,255,0.04)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.15s ease',
+                    flexShrink: 0
+                  }}
+                >
+                  <AnimatePresence>
+                    {checked && (
+                      <motion.svg 
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        exit={{ scale: 0 }}
+                        transition={{ duration: 0.15 }}
+                        width="10" height="10" viewBox="0 0 10 10" fill="none"
+                      >
+                        <path d="M2 5l2.5 2.5L8 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </motion.svg>
+                    )}
+                  </AnimatePresence>
+                </div>
+                <span className="label-text text-[13px] transition-colors" style={{ color: 'var(--text-secondary)' }}>{c}</span>
+              </label>
+            );
+          })}
         </div>
       </FilterSection>
 
@@ -253,7 +429,7 @@ export default function FilterSidebar({ filters, onFiltersChange, filteredCount,
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:block w-72 shrink-0">
+      <aside className="hidden lg:block w-72 shrink-0" style={{ zIndex: 100, position: 'relative' }}>
         <div className="sticky top-4 glass rounded-2xl p-5 backdrop-blur-md max-h-[calc(100vh-6rem)] overflow-y-auto custom-scrollbar" style={{ background: 'var(--bg-surface)', border: '0.5px solid var(--border-color)', transition: 'var(--transition)' }}>
           <h3 className="text-sm font-bold mb-4 flex items-center space-x-2" style={{ color: 'var(--text-primary)' }}>
             <SlidersHorizontal className="w-4 h-4" />

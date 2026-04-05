@@ -1,3 +1,7 @@
+// ⚠️ DO NOT MODIFY THIS FILE when adding new features.
+// This file is the root layout — editing it breaks the entire app.
+// Only edit this file when explicitly asked to change the layout.
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -17,6 +21,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Blocking script: apply saved theme BEFORE first paint to prevent FOUC */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('mockprep-theme') || 'dark';
+                  document.documentElement.setAttribute('data-theme', theme);
+                } catch(e) {
+                  document.documentElement.setAttribute('data-theme', 'dark');
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className={`${inter.className} min-h-screen`}>
         <ThemeProvider>
           {children}

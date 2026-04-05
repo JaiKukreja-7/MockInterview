@@ -1,3 +1,7 @@
+/* ⚠️ DO NOT MODIFY THIS FILE when adding new features.
+   This file is the global stylesheet — editing it breaks the entire app.
+   Only edit this file when explicitly asked to change global styles. */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

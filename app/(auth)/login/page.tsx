@@ -11,6 +11,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [guestLoading, setGuestLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const router = useRouter();
@@ -23,6 +24,21 @@ export default function LoginPage() {
     setSuccessMsg(null);
 
     if (isSignUp) {
+      // Check if current user is anonymous — upgrade instead of creating fresh
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      if (currentUser?.is_anonymous) {
+        const { error } = await supabase.auth.updateUser({ email, password });
+        setLoading(false);
+        if (error) {
+          setError(error.message);
+        } else {
+          // Mark as no longer guest
+          await supabase.from('users').update({ is_guest: false, email }).eq('id', currentUser.id);
+          router.push('/dashboard');
+        }
+        return;
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -48,6 +64,33 @@ export default function LoginPage() {
       } else {
         router.push('/dashboard');
       }
+    }
+  };
+
+  const handleGuestLogin = async () => {
+    setGuestLoading(true);
+    setError(null);
+    try {
+      const { data, error } = await supabase.auth.signInAnonymously();
+      if (error) throw error;
+      if (!data.user) throw new Error('No user returned');
+
+      // Insert guest profile into users table
+      await supabase.from('users').upsert({
+        id: data.user.id,
+        name: 'Guest',
+        email: null,
+        is_guest: true,
+        guest_created_at: new Date().toISOString(),
+        last_active: new Date().toISOString(),
+        streak_count: 0,
+      }, { onConflict: 'id' });
+
+      router.push('/dashboard');
+    } catch (err: any) {
+      setError(err?.message || 'Guest login failed, please try again');
+    } finally {
+      setGuestLoading(false);
     }
   };
 
@@ -164,6 +207,34 @@ export default function LoginPage() {
         </button>
       </div>
 
+      {/* Guest login divider */}
+      <div className="mt-5 flex items-center">
+        <div className="flex-1" style={{ borderTop: '1px solid var(--border-color)' }}></div>
+        <span className="px-4 text-xs uppercase font-medium" style={{ color: 'var(--text-muted)' }}>Or</span>
+        <div className="flex-1" style={{ borderTop: '1px solid var(--border-color)' }}></div>
+      </div>
+
+      {/* Guest login button */}
+      <div className="mt-5">
+        <button
+          onClick={handleGuestLogin}
+          disabled={guestLoading}
+          type="button"
+          className="w-full font-medium py-3 rounded-lg transition-all active:scale-[0.98] flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{
+            background: 'transparent',
+            border: '0.5px solid rgba(255,255,255,0.15)',
+            color: 'rgba(255,255,255,0.7)',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(124,58,237,0.5)'; e.currentTarget.style.color = 'rgba(255,255,255,0.9)'; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; }}
+        >
+          {guestLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <span>Continue as Guest →</span>}
+        </button>
+        <p className="text-center text-xs mt-2" style={{ color: 'var(--text-muted)', opacity: 0.6 }}>
+          No account needed — limited access
+        </p>
+      </div>
       <div className="mt-6 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
         {isSignUp ? (
           <>Already have an account? <span onClick={() => setIsSignUp(false)} className="text-primary hover:text-primary/80 cursor-pointer transition-colors">Log in</span></>

@@ -41,8 +41,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
+  const [isGuest, setIsGuest] = useState(false);
+
+  useEffect(() => {
+    import('@/lib/guest-tracking').then(({ isCurrentUserGuest }) => {
+      isCurrentUserGuest().then(setIsGuest);
+    });
+  }, []);
 
   const handleLogout = async () => {
+    // Clear guest cache on logout
+    import('@/lib/guest-tracking').then(({ clearGuestCache }) => clearGuestCache());
     await supabase.auth.signOut();
     router.push('/login');
   };
@@ -133,6 +142,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <span className="font-bold text-base" style={{ color: 'var(--text-primary)' }}>MockPrep</span>
           </div>
           <div className="flex items-center space-x-3">
+            {isGuest && (
+              <span style={{
+                background: 'rgba(124,58,237,0.15)',
+                color: '#7C3AED',
+                fontSize: '11px',
+                fontWeight: 600,
+                padding: '3px 10px',
+                borderRadius: '999px',
+                border: '0.5px solid rgba(124,58,237,0.3)',
+              }}>Guest</span>
+            )}
             <ThemeToggle />
             <button onClick={handleLogout} style={{ color: 'var(--text-secondary)' }} className="hover:text-red-400">
               <LogOut className="w-5 h-5" />
@@ -141,7 +161,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </header>
 
         {/* Desktop Top Bar */}
-        <div className="hidden md:flex items-center justify-end px-8 py-3 shrink-0" style={{ borderBottom: '1px solid var(--border-color)', transition: 'var(--transition)' }}>
+        <div className="hidden md:flex items-center justify-end px-8 py-3 shrink-0 space-x-3" style={{ borderBottom: '1px solid var(--border-color)', transition: 'var(--transition)' }}>
+          {isGuest && (
+            <span style={{
+              background: 'rgba(124,58,237,0.15)',
+              color: '#7C3AED',
+              fontSize: '11px',
+              fontWeight: 600,
+              padding: '3px 12px',
+              borderRadius: '999px',
+              border: '0.5px solid rgba(124,58,237,0.3)',
+            }}>Guest</span>
+          )}
           <ThemeToggle />
         </div>
 
