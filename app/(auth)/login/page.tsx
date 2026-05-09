@@ -6,6 +6,7 @@ import { createClient } from '@/utils/supabase/client';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { getURL } from '@/utils/supabase/url';
 
 const DashboardBackground = dynamic(() => import('@/components/DashboardBackground'), { ssr: false, loading: () => null })
 
@@ -46,7 +47,7 @@ export default function LoginPage() {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: `${getURL()}auth/callback`,
         }
       });
       setLoading(false);
@@ -101,7 +102,7 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${getURL()}auth/callback`,
       },
     });
     if (error) setError(error.message);
@@ -111,7 +112,7 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${getURL()}auth/callback`,
       },
     });
     if (error) setError(error.message);

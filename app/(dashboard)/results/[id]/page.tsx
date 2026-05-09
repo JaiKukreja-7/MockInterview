@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Trophy, Share2, RefreshCw, Play, ChevronDown, ChevronUp, CheckCircle, XCircle, Sparkles, Lightbulb, BookOpen, Loader2, TrendingUp, TrendingDown, SkipForward } from 'lucide-react';
 import Link from 'next/link';
 import confetti from 'canvas-confetti';
+import { sendInterviewCompleteEmail } from '@/lib/send-email';
 
 export default function ResultsScreen() {
   const { id } = useParams() as { id: string };
@@ -19,6 +20,7 @@ export default function ResultsScreen() {
   const [loading, setLoading] = useState(true);
   const [expandedQ, setExpandedQ] = useState<number | null>(null);
   const [showExcellentBanner, setShowExcellentBanner] = useState(false);
+  const emailSentRef = useRef(false);
 
   useEffect(() => {
     async function load() {
@@ -66,6 +68,45 @@ export default function ResultsScreen() {
       return () => clearTimeout(timer);
     }
   }, [loading, interview, summary]);
+
+  // Send interview complete email (fire-and-forget, once only)
+  useEffect(() => {
+    if (loading || !interview || !summary || emailSentRef.current) return;
+    emailSentRef.current = true;
+
+    (async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user?.email) return; // Skip for guests with no email
+
+        // Get user profile for name
+        const { data: profile } = await supabase
+          .from('users')
+          .select('name, is_guest, email_notifications')
+          .eq('id', user.id)
+          .single();
+
+        // Skip if guest or unsubscribed
+        if (profile?.is_guest || profile?.email_notifications === false) return;
+
+        await sendInterviewCompleteEmail({
+          email: user.email,
+          name: profile?.name || user.email.split('@')[0],
+          userId: user.id,
+          score: summary.total_score || 0,
+          role: interview.role || '',
+          difficulty: interview.difficulty || '',
+          interviewType: interview.type || '',
+          topStrength: summary.top_strength,
+          topWeakness: summary.top_weakness,
+          improvementAreas: summary.improvement_areas,
+        });
+      } catch (err) {
+        // Never let email errors affect the results page
+        console.error('[Results] Email send error (non-blocking):', err);
+      }
+    })();
+  }, [loading, interview, summary, supabase]);
 
   if (loading) {
     return (
